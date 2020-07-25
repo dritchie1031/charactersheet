@@ -1,0 +1,40 @@
+.App {
+  min-height: 100vh;
+}
+
+.appbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.point-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.appbaractions {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.paper-content {
+  padding: 5px;
+}
+
+.row-card { 
+  display: flex; 
+  flex-direction: row; 
+  justify-content: space-around;
+  align-items: center;
+}
+
+.bot-nav {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+}
