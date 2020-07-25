@@ -1,10 +1,8 @@
 # Character Sheet App
 
-<div style="display: flex; flex-direction: row; justify-content: space-around">
 ![GitHub issues](https://img.shields.io/github/issues/dritchie1031/charactersheet?style=plastic)
 ![GitHub top language](https://img.shields.io/github/languages/top/dritchie1031/charactersheet?style=plastic)
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/dritchie1031/charactersheet?style=plastic)
-</div>
 
 Welcome to my Character Sheet App!! I'll come up with a new name when the project gets closer to completion, but right now a descriptive title is fine. This is a character sheet app for D&D 5th edition, where you can store your character's information on your computer with a clean interface and intuitive mechanics. I know there are several of these out there already, but none of them have really satisfied me with either a clunky UI or forcing payment for content to put in your character sheet. This won't have any 5e content built into it, but it allows you to input your own content. 
 
@@ -52,7 +50,8 @@ This is currently a personal project that I'm using to practice several importan
 
 ## License
 
-This app is distributed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). 
+This app is distributed under GPLv3. 
+
 Electron, Node.js, and Material-UI are MIT-licensed.
 
 ## Learn More
