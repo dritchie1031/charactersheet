@@ -1,39 +1,14 @@
 import React, { useState } from 'react';
 import { createStyles, makeStyles, Theme, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import MenuIcon from '@material-ui/icons/Menu';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import FingerprintIcon from '@material-ui/icons/Fingerprint';
-import PersonIcon from '@material-ui/icons/Person';
-import FireplaceIcon from '@material-ui/icons/Fireplace';
-import OfflineBoltIcon from '@material-ui/icons/OfflineBolt';
-import Fab from '@material-ui/core/Fab';
-import EditIcon from '@material-ui/icons/Edit';
-import ListAltIcon from '@material-ui/icons/ListAlt';
-import PeopleIcon from '@material-ui/icons/People';
-import ImportExportIcon from '@material-ui/icons/ImportExport';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import MoreIcon from '@material-ui/icons/More';
-import Tooltip from '@material-ui/core/Tooltip';
-import './App.css';
-import './style.css';
+import { CssBaseline } from '@material-ui/core';
+import LabelBottomNav from './utils/LabelBottomNav';
+
 import { charinfo, char, spellinfo, spell } from './utils/data';
-import CreateChar from './utils/CreateChar';
 import CharacterPage from './charpage/CharacterPage';
 import SpellsPage from './spellpage/SpellsPage';
-import { CssBaseline } from '@material-ui/core';
+import CharacterAppBar from './utils/CharacterAppBar';
+import './App.css';
+import './style.css';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -94,124 +69,6 @@ let spellsTest: spellinfo = {
     { name: "Firebolt", description: "Range 120ft., 1d10 fire damage.", prepped: true }]
   }],
   points: false
-}
-
-function TagMenu() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  return (
-    <div>
-      <Tooltip title="Special Pages">
-        <Fab onClick={handleClick} size="small">
-          <MoreIcon />
-        </Fab>
-      </Tooltip>
-      <Menu
-        id="tag-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleClose}>Combat</MenuItem>
-        <MenuItem onClick={handleClose}>Explore</MenuItem>
-        <MenuItem onClick={handleClose}>Social</MenuItem>
-      </Menu>
-    </div>
-  );
-}
-
-function CharacterAppBar(props: { name: string; startEdit: () => void; edit: boolean; endEdit: () => void }) {
-  if (props.edit) {
-    return (
-      <div style={{ position: "fixed", top: "0px", width: "100%", zIndex: 4 }}>
-        <AppBar position="static">
-          <Toolbar className="appbar">
-            <Typography variant="h5">
-              {props.name}
-            </Typography>
-            <div className="appbaractions">
-              <Tooltip title="Save Changes">
-                <Fab size="small" color="secondary" onClick={props.endEdit}>
-                  <SaveAltIcon />
-                </Fab>
-              </Tooltip>
-              <CreateChar />
-              <Tooltip title="Import or Export">
-                <Fab size="small" color="secondary" onClick={props.endEdit}>
-                  <ImportExportIcon />
-                </Fab>
-              </Tooltip>
-              <Tooltip title="Level Up">
-                <Fab size="small" onClick={props.endEdit}>
-                  <ArrowUpwardIcon />
-                </Fab>
-              </Tooltip>
-              <TagMenu />
-            </div>
-          </Toolbar>
-        </AppBar>
-      </div >
-    );
-  } else {
-    return (
-      <div style={{ position: "fixed", top: "0px", width: "100%", zIndex: 4 }}>
-        <AppBar position="static">
-          <Toolbar className="appbar">
-            <Typography variant="h5">
-              {props.name}
-            </Typography>
-            <div className="appbaractions">
-              <Tooltip title="Edit Info">
-                <Fab size="small" color="secondary" onClick={props.startEdit}>
-                  <EditIcon />
-                </Fab>
-              </Tooltip>
-              <CreateChar />
-              <Tooltip title="Import or Export">
-                <Fab size="small" color="secondary" onClick={props.endEdit}>
-                  <ImportExportIcon />
-                </Fab>
-              </Tooltip>
-              <Tooltip title="Level Up">
-                <Fab size="small" onClick={props.endEdit}>
-                  <ArrowUpwardIcon />
-                </Fab>
-              </Tooltip>
-              <TagMenu />
-            </div>
-          </Toolbar>
-        </AppBar>
-      </div>
-    );
-  }
-
-}
-
-function LabelBottomNavigation(props: { goTo0: () => void; goTo2: () => void }) {
-  const classes = useStyles();
-  const [value, setValue] = React.useState('recents');
-
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
-    setValue(newValue);
-  };
-
-  return (
-    <BottomNavigation value={value} onChange={handleChange} showLabels>
-      <BottomNavigationAction label="Character" value="char" onClick={props.goTo0} icon={<PersonIcon />} />
-      <BottomNavigationAction label="Background" value="bg" icon={<FingerprintIcon />} />
-      <BottomNavigationAction label="Spells" value="spells" onClick={props.goTo2} icon={<FireplaceIcon />} />
-      <BottomNavigationAction label="Inventory" value="inv" icon={<ListAltIcon />} />
-    </BottomNavigation>
-  );
 }
 
 /*  
@@ -292,7 +149,7 @@ function App() {
       <div className="App" style={{ marginBottom: "50px" }} >
         <CharacterAppBar name={basics.name} startEdit={startEdit} edit={edit} endEdit={endEdit} />
         {getPage(page)}
-        <div className="bot-nav"><LabelBottomNavigation goTo0={setToChar} goTo2={setToSpells} /></div>
+        <div className="bot-nav"><LabelBottomNav goTo0={setToChar} goTo2={setToSpells} /></div>
       </div>
     </ThemeProvider>
   );
