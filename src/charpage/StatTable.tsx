@@ -23,7 +23,7 @@ export default function StatTable(props: {
 
   function createOnChangeHandlerSave(index: number): (event: React.ChangeEvent<HTMLInputElement>) => void {
     let newOnChange = function (event: React.ChangeEvent<HTMLInputElement>) {
-      let newSaves = [...props.character.skills];
+      let newSaves = [...props.character.saves];
       newSaves[index] = event.target.checked;
       let newChar: char = {
         ...props.character,
