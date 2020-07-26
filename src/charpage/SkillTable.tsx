@@ -19,6 +19,19 @@ export default function SkillTable(props: {
 }) {
   let c = props.character;
 
+  function createOnChangeHandler(index: number): (event: React.ChangeEvent<HTMLInputElement>) => void {
+    let newOnChange = function (event: React.ChangeEvent<HTMLInputElement>) {
+      let newSkills = [...props.character.skills];
+      newSkills[index] = event.target.checked;
+      let newChar: char = {
+        ...props.character,
+        skills: newSkills
+      }
+      props.setState(newChar);
+    }
+    return newOnChange;
+  }
+
   let skillNames = [
     'Acrobatics', 'Animal Handling', 'Arcana', 'Athletics', 'Deception', 'History',
     'Insight', 'Intimidation', 'Investigation', 'Medicine', 'Nature', 'Perception',
@@ -37,7 +50,7 @@ export default function SkillTable(props: {
         <TableCell component="th" scope="row">
           {skillNames[i]}
         </TableCell>
-        <TableCell align="right">{c.skills[i] ? <Checkbox defaultChecked /> : <Checkbox />}</TableCell>
+        <TableCell align="right"><Checkbox checked={c.skills[i]} onChange={createOnChangeHandler(i)} /></TableCell>
       </TableRow>
     );
     skillRows.push(
@@ -45,46 +58,27 @@ export default function SkillTable(props: {
         <TableCell component="th" scope="row">
           {skillNames[i]}
         </TableCell>
-        <TableCell align="right">{c.skills[i] ? Math.floor((c.stats[skillStat[i]] - 10) / 2) : Math.floor((c.stats[skillStat[i]] - 10) / 2) + c.prof}</TableCell>
+        <TableCell align="right">{!c.skills[i] ? Math.floor((c.stats[skillStat[i]] - 10) / 2) : Math.floor((c.stats[skillStat[i]] - 10) / 2) + c.prof}</TableCell>
       </TableRow>
     );
   }
 
-  if (props.edit) {
-    return (
-      <Grid item xs={6}>
-        <TableContainer component={Paper} style={{ maxHeight: "375px", overflowY: "scroll" }}>
-          <Table aria-label="Skill table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Skill</TableCell>
-                <TableCell align="right">Bonus</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {skillRowsEdit}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Grid>
-    );
-  } else {
-    return (
-      <Grid item xs={6}>
-        <TableContainer component={Paper} style={{ maxHeight: "375px", overflowY: "scroll" }}>
-          <Table aria-label="Skill table" >
-            <TableHead>
-              <TableRow>
-                <TableCell>Skill</TableCell>
-                <TableCell align="right">Bonus</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {skillRows}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Grid>
-    );
-  }
+  return (
+    <Grid item xs={6}>
+      <TableContainer component={Paper} style={{ maxHeight: "375px", overflowY: "scroll" }}>
+        <Table aria-label="Skill table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Skill</TableCell>
+              <TableCell align="right">Bonus</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {props.edit ? skillRowsEdit : skillRows}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Grid>
+  );
+
 }

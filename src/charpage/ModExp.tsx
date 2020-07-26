@@ -9,8 +9,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 
-export default function ModExp() {
+import { char } from '../utils/data';
+
+export default function ModExp(props: {
+  character: char;
+  setState: (newchar: char) => void;
+}) {
   const [open, setOpen] = React.useState(false);
+  const [exp, setExp] = React.useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -19,6 +25,29 @@ export default function ModExp() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleSubmit = () => {
+    let newExp = props.character.exp + exp;
+    if (newExp < 0) {
+      newExp = 0;
+    }
+    let newChar: char = {
+      ...props.character,
+      exp: newExp
+    }
+    props.setState(newChar);
+    handleClose();
+  }
+
+  function onExpChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    let expNum = parseInt(event.target.value, 10);
+    if (expNum == NaN) {
+      // @TODO Have a snackbar show up
+      console.log("Incorrect input");
+      return;
+    }
+    setExp(expNum);
+  }
 
   return (
     <div>
@@ -36,13 +65,14 @@ export default function ModExp() {
             id="expmod"
             inputProps={{ style: { textAlign: 'center' } }}
             label="Experience"
-            type="number" defaultValue={0} />
+            type="number"
+            onChange={onExpChange} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             Add Exp
           </Button>
         </DialogActions>
