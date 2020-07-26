@@ -26,43 +26,114 @@ export default function CharacterPage(props: {
     otherPoints.push(
       <Points
         pts={c.otherpts[i]}
-        edit={props.edit} />
+        edit={props.edit}
+        character={props.character}
+        setState={props.setState}
+        index={i} />
     );
+  }
+
+  function onClassChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    let newChar: char = {
+      ...props.character,
+      class: event.target.value
+    }
+    props.setState(newChar);
+  }
+
+  function onRaceChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    let newChar: char = {
+      ...props.character,
+      race: event.target.value
+    }
+    props.setState(newChar);
+  }
+
+  function onLevelChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    let newChar: char = {
+      ...props.character,
+      level: parseInt(event.target.value)
+    }
+    props.setState(newChar);
+  }
+
+  function onAlignChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    let newChar: char = {
+      ...props.character,
+      align: event.target.value
+    }
+    props.setState(newChar);
+  }
+
+  function onACChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    let newChar: char = {
+      ...props.character,
+      ac: parseInt(event.target.value)
+    }
+    props.setState(newChar);
+  }
+
+  function onPBChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    let newChar: char = {
+      ...props.character,
+      prof: parseInt(event.target.value)
+    }
+    props.setState(newChar);
+  }
+
+  function onInitChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    let newChar: char = {
+      ...props.character,
+      init: parseInt(event.target.value)
+    }
+    props.setState(newChar);
+  }
+
+  function onSpeedChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    let newChar: char = {
+      ...props.character,
+      speed: parseInt(event.target.value)
+    }
+    props.setState(newChar);
   }
 
   if (props.edit) {
     return (
-      <Grid container spacing={3} style={{ padding: "2.5vw;", marginTop: "50px" }}>
-        <Grid item xs={3}><Card><CardContent ><TextField inputProps={{ style: { textAlign: 'center' } }} label="Class" defaultValue={c.class} /></CardContent></Card></Grid>
-        <Grid item xs={3}><Card><CardContent ><TextField inputProps={{ style: { textAlign: 'center' } }} label="Race" defaultValue={c.race} /></CardContent></Card></Grid>
-        <Grid item xs={3}><Card><CardContent ><TextField inputProps={{ style: { textAlign: 'center' } }} label="Max HP" type="number" defaultValue={c.maxhp} /></CardContent></Card></Grid>
-        <Grid item xs={3}><Card><CardContent ><TextField inputProps={{ style: { textAlign: 'center' } }} label="Alignment" defaultValue={c.align} /></CardContent></Card></Grid>
+      <Grid container spacing={3} style={{ padding: "2.5vw", marginTop: "50px" }}>
+        <Grid item xs={3}><Card><CardContent ><TextField inputProps={{ style: { textAlign: 'center' } }} label="Class" defaultValue={c.class}
+          onChange={onClassChange} /></CardContent></Card></Grid>
+        <Grid item xs={3}><Card><CardContent ><TextField inputProps={{ style: { textAlign: 'center' } }} label="Race" defaultValue={c.race}
+          onChange={onRaceChange} /></CardContent></Card></Grid>
+        <Grid item xs={3}><Card><CardContent ><TextField inputProps={{ style: { textAlign: 'center' } }} label="Level" type="number" defaultValue={c.level}
+          onChange={onLevelChange} /></CardContent></Card></Grid>
+        <Grid item xs={3}><Card><CardContent ><TextField inputProps={{ style: { textAlign: 'center' } }} label="Alignment" defaultValue={c.align}
+          onChange={onAlignChange} /></CardContent></Card></Grid>
         {HealthBar(props)}
         <Grid item xs={3}>
           <Card>
             <CardContent className="row-card">
-              <TextField inputProps={{ style: { textAlign: 'center' } }} label="AC" type="number" defaultValue={c.ac} />
+              <TextField inputProps={{ style: { textAlign: 'center' } }} label="AC" type="number" defaultValue={c.ac} onChange={onACChange} />
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={3}>
           <Card>
             <CardContent className="row-card">
-              <TextField inputProps={{ style: { textAlign: 'center' } }} label="Prof." type="number" defaultValue={c.prof} />
+              <TextField inputProps={{ style: { textAlign: 'center' } }} label="Prof." type="number" defaultValue={c.prof} onChange={onPBChange} />
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={3}>
           <Card>
             <CardContent className="row-card">
-              <TextField inputProps={{ style: { textAlign: 'center' } }} label="Init." type="number" defaultValue={c.init} />
+              <TextField inputProps={{ style: { textAlign: 'center' } }} label="Init." type="number" defaultValue={c.init} onChange={onInitChange} />
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={3}>
           <Card>
             <CardContent className="row-card">
-              <TextField inputProps={{ style: { textAlign: 'center' } }} label="Speed" type="number" defaultValue={c.speed} />
+              <TextField inputProps={{ style: { textAlign: 'center' } }} label="Speed" type="number" defaultValue={c.speed} onChange={onSpeedChange} />
             </CardContent>
           </Card>
         </Grid>
@@ -84,28 +155,28 @@ export default function CharacterPage(props: {
         <Grid item xs={3}>
           <Card>
             <CardContent className="row-card">
-              <TextField inputProps={{ style: { textAlign: 'center' } }} label="AC" type="number" value={c.ac} />
+              <Typography variant="h6">AC: {c.ac}</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={3}>
           <Card>
             <CardContent className="row-card">
-              <TextField inputProps={{ style: { textAlign: 'center' } }} label="Proficiency Bonus" type="number" value={c.prof} />
+              <Typography variant="h6">Prof. Bonus: +{c.prof}</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={3}>
           <Card>
             <CardContent className="row-card">
-              <TextField inputProps={{ style: { textAlign: 'center' } }} label="Initiative" type="number" value={c.init} />
+              <Typography variant="h6">Initiative: {c.init}</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={3}>
           <Card>
             <CardContent className="row-card">
-              <TextField inputProps={{ style: { textAlign: 'center' } }} label="Speed" type="number" value={c.speed} />
+              <Typography variant="h6">Speed: {c.speed} ft.</Typography>
             </CardContent>
           </Card>
         </Grid>

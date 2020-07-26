@@ -16,8 +16,33 @@ export default function HealthBar(props: {
   setState: (newchar: char) => void;
   edit: boolean;
 }) {
-
   let c = props.character;
+
+
+  function maxHPOnChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    let newChar: char = {
+      ...props.character,
+      maxhp: parseInt(event.target.value)
+    }
+    props.setState(newChar);
+  }
+
+  function currHPOnChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    let newChar: char = {
+      ...props.character,
+      currhp: parseInt(event.target.value)
+    }
+    props.setState(newChar);
+  }
+
+  function tempHPOnChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    let newChar: char = {
+      ...props.character,
+      temphp: parseInt(event.target.value)
+    }
+    props.setState(newChar);
+  }
+
   let bar2Edit = [];
   let bar2NoEdit = [];
   if (c.exp > -1) {
@@ -28,9 +53,9 @@ export default function HealthBar(props: {
             className="row-card">
             <Typography variant="h6">Max HP: {c.maxhp}</Typography>
             <Typography variant="h6">Current HP: {c.currhp}</Typography>
-            <TextField inputProps={{ style: { textAlign: 'center' } }} label="Temp HP" type="number" defaultValue={c.temphp} />
+            <Typography variant="h6">Temp HP: {c.temphp}</Typography>
             <CircularProgressWithLabel variant="static" value={100 * (c.currhp / c.maxhp)} />
-            <ModHealth />
+            <ModHealth character={props.character} setState={props.setState} />
           </CardContent>
         </Card>
       </Grid>);
@@ -40,7 +65,7 @@ export default function HealthBar(props: {
           <CardContent
             className="row-card">
             <Typography variant="h6">Exp: {c.exp}</Typography>
-            <ModExp />
+            <ModExp character={props.character} setState={props.setState} />
           </CardContent>
         </Card>
       </Grid>);
@@ -49,9 +74,21 @@ export default function HealthBar(props: {
         <Card>
           <CardContent
             className="row-card">
-            <TextField inputProps={{ style: { textAlign: 'center' } }} label="Max HP" type="number" defaultValue={c.maxhp} />
-            <TextField inputProps={{ style: { textAlign: 'center' } }} label="Current HP" type="number" defaultValue={c.currhp} />
-            <TextField inputProps={{ style: { textAlign: 'center' } }} label="Temp HP" type="number" defaultValue={c.temphp} />
+            <TextField
+              inputProps={{ style: { textAlign: 'center' } }}
+              label="Max HP" type="number"
+              defaultValue={c.maxhp}
+              onChange={maxHPOnChange} />
+            <TextField
+              inputProps={{ style: { textAlign: 'center' } }}
+              label="Current HP" type="number"
+              defaultValue={c.currhp}
+              onChange={currHPOnChange} />
+            <TextField
+              inputProps={{ style: { textAlign: 'center' } }}
+              label="Temp HP" type="number"
+              defaultValue={c.temphp}
+              onChange={tempHPOnChange} />
             <CircularProgressWithLabel variant="static" value={100 * (c.currhp / c.maxhp)} />
           </CardContent>
         </Card>
@@ -74,9 +111,9 @@ export default function HealthBar(props: {
             className="row-card">
             <Typography variant="h6">Max HP: {c.maxhp}</Typography>
             <Typography variant="h6">Current HP: {c.currhp}</Typography>
-            <TextField inputProps={{ style: { textAlign: 'center' } }} label="Temp HP" type="number" defaultValue={c.temphp} />
+            <Typography variant="h6">Temp HP: {c.temphp}</Typography>
             <CircularProgressWithLabel variant="static" value={100 * (c.currhp / c.maxhp)} />
-            <ModHealth />
+            <ModHealth character={props.character} setState={props.setState} />
           </CardContent>
         </Card>
       </Grid>);
@@ -85,9 +122,21 @@ export default function HealthBar(props: {
         <Card>
           <CardContent
             className="row-card">
-            <TextField inputProps={{ style: { textAlign: 'center' } }} label="Max HP" type="number" defaultValue={c.maxhp} />
-            <TextField inputProps={{ style: { textAlign: 'center' } }} label="Current HP" type="number" defaultValue={c.currhp} />
-            <TextField inputProps={{ style: { textAlign: 'center' } }} label="Temp HP" type="number" defaultValue={c.temphp} />
+            <TextField
+              inputProps={{ style: { textAlign: 'center' } }}
+              label="Max HP" type="number"
+              defaultValue={c.maxhp}
+              onChange={maxHPOnChange} />
+            <TextField
+              inputProps={{ style: { textAlign: 'center' } }}
+              label="Current HP" type="number"
+              defaultValue={c.currhp}
+              onChange={currHPOnChange} />
+            <TextField
+              inputProps={{ style: { textAlign: 'center' } }}
+              label="Temp HP" type="number"
+              defaultValue={c.temphp}
+              onChange={tempHPOnChange} />
             <CircularProgressWithLabel variant="static" value={100 * (c.currhp / c.maxhp)} />
           </CardContent>
         </Card>

@@ -6,8 +6,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
 
-export function AddFeatureBtn() {
+import { char } from '../utils/data';
+
+export function AddFeatureBtn(props: {
+  character: char;
+  setState: (newchar: char) => void;
+}) {
   const [open, setOpen] = React.useState(false);
+  const [featName, setName] = React.useState("");
+  const [featDets, setDets] = React.useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -16,6 +23,23 @@ export function AddFeatureBtn() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleSubmit = () => {
+    let newChar: char = {
+      ...props.character,
+      features: props.character.features.concat([{ name: featName, value: featDets }])
+    }
+    props.setState(newChar);
+    handleClose();
+  }
+
+  function onNameChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    setName(event.target.value);
+  }
+
+  function onDetsChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    setDets(event.target.value);
+  }
 
   return (
     <div>
@@ -29,18 +53,20 @@ export function AddFeatureBtn() {
         <DialogContent style={{ display: "flex", flexDirection: "column" }}>
           <TextField
             label="Feature Name"
-            fullWidth />
+            fullWidth
+            onChange={onNameChange} />
           <TextField
             label="Feature Details"
             multiline
             fullWidth
-            rowsMax={6} />
+            rowsMax={6}
+            onChange={onDetsChange} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             Add Feature
           </Button>
         </DialogActions>
@@ -49,8 +75,12 @@ export function AddFeatureBtn() {
   );
 }
 
-export function AddProfBtn() {
+export function AddProfBtn(props: {
+  character: char;
+  setState: (newchar: char) => void;
+}) {
   const [open, setOpen] = React.useState(false);
+  const [prof, setProf] = React.useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -59,6 +89,19 @@ export function AddProfBtn() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleSubmit = () => {
+    let newChar: char = {
+      ...props.character,
+      otherprofs: props.character.otherprofs.concat([prof])
+    }
+    props.setState(newChar);
+    handleClose();
+  }
+
+  function onProfChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    setProf(event.target.value);
+  }
 
   return (
     <div>
@@ -72,13 +115,14 @@ export function AddProfBtn() {
         <DialogContent style={{ display: "flex", flexDirection: "column" }}>
           <TextField
             label="Proficiency"
-            fullWidth />
+            fullWidth
+            onChange={onProfChange} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             Add Proficiency
           </Button>
         </DialogActions>

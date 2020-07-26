@@ -21,6 +21,32 @@ export default function StatTable(props: {
 
   let c = props.character;
 
+  function createOnChangeHandlerSave(index: number): (event: React.ChangeEvent<HTMLInputElement>) => void {
+    let newOnChange = function (event: React.ChangeEvent<HTMLInputElement>) {
+      let newSaves = [...props.character.skills];
+      newSaves[index] = event.target.checked;
+      let newChar: char = {
+        ...props.character,
+        saves: newSaves
+      }
+      props.setState(newChar);
+    }
+    return newOnChange;
+  }
+
+  function createOnChangeHandlerScore(index: number): (event: React.ChangeEvent<HTMLInputElement>) => void {
+    let newOnChange = function (event: React.ChangeEvent<HTMLInputElement>) {
+      let newStats = [...props.character.stats];
+      newStats[index] = parseInt(event.target.value);
+      let newChar: char = {
+        ...props.character,
+        stats: newStats
+      }
+      props.setState(newChar);
+    }
+    return newOnChange;
+  }
+
   let statNames = ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha'];
   let statRows = [];
   let statRowsEdit = [];
@@ -30,9 +56,16 @@ export default function StatTable(props: {
         <TableCell component="th" scope="row">
           {statNames[i]}
         </TableCell>
-        <TableCell align="right"><TextField inputProps={{ style: { textAlign: 'center' } }} label={statNames[i]} type="number" defaultValue={c.stats[i]} /></TableCell>
+        <TableCell align="right">
+          <TextField
+            inputProps={{ style: { textAlign: 'center' } }}
+            label={statNames[i]}
+            type="number"
+            defaultValue={c.stats[i]}
+            onChange={createOnChangeHandlerScore(i)} />
+        </TableCell>
         <TableCell align="right">{Math.floor((c.stats[i] - 10) / 2)}</TableCell>
-        <TableCell align="right">{c.saves[i] ? <Checkbox defaultChecked /> : <Checkbox />}</TableCell>
+        <TableCell align="right"><Checkbox checked={c.saves[i]} onChange={createOnChangeHandlerSave(i)} /></TableCell>
       </TableRow>
     );
     statRows.push(

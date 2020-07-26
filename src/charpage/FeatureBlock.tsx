@@ -21,6 +21,36 @@ export default function FeatureBlock(props: {
 }) {
   let c = props.character;
 
+  function createNameOnChangeHandler(index: number): (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void {
+    let newOnChange = function (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+      let newFeat = { ...props.character.features[index] };
+      newFeat.name = event.target.value;
+      let newFeats = [...props.character.features];
+      newFeats[index] = newFeat;
+      let newChar: char = {
+        ...props.character,
+        features: newFeats
+      }
+      props.setState(newChar);
+    }
+    return newOnChange;
+  }
+
+  function createDetsOnChangeHandler(index: number): (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void {
+    let newOnChange = function (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+      let newFeat = { ...props.character.features[index] };
+      newFeat.value = event.target.value;
+      let newFeats = [...props.character.features];
+      newFeats[index] = newFeat;
+      let newChar: char = {
+        ...props.character,
+        features: newFeats
+      }
+      props.setState(newChar);
+    }
+    return newOnChange;
+  }
+
   let featureAccordion = [];
   for (let i = 0; i < c.features.length; i++) {
     featureAccordion.push(
@@ -42,13 +72,15 @@ export default function FeatureBlock(props: {
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <TextField
             label="Feature Name"
-            defaultValue={c.features[i].name} />
+            defaultValue={c.features[i].name}
+            onChange={createNameOnChangeHandler(i)} />
         </AccordionSummary>
         <AccordionDetails>
           <TextField
             label="Feature Details"
             multiline
-            defaultValue={c.features[i].value} />
+            defaultValue={c.features[i].value}
+            onChange={createDetsOnChangeHandler(i)} />
         </AccordionDetails>
       </Accordion>
     );
@@ -60,7 +92,7 @@ export default function FeatureBlock(props: {
         <Card>
           <CardContent>{featureEditAccordion}</CardContent>
           <CardActions>
-            <AddFeatureBtn />
+            <AddFeatureBtn character={props.character} setState={props.setState} />
           </CardActions>
         </Card>
       </Grid>
