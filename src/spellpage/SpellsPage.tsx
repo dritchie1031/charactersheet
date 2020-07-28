@@ -26,41 +26,43 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
-import { spellinfo, spell } from '../utils/data';
+import { spellinfo, spell, char } from '../utils/data';
 import { findByLabelText } from '@testing-library/react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+
+import SpellLevel from './SpellLevel';
+import SpellPoints from './SpellPoints';
+import { AddLevel } from './SpellBtns';
 import '../style.css';
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: any;
-  value: any;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
+function getSpellAbility(ability: number) {
+  switch (ability) {
+    case 0:
+      return "Strength";
+    case 1:
+      return "Dexterity";
+    case 2:
+      return "Constitution";
+    case 3:
+      return "Intelligence";
+    case 4:
+      return "Wisdom";
+    case 5:
+      return "Charisma";
+    default:
+      return "Incorrect Stat ID"
+  }
 }
 
 export default function SpellsPage(props: {
   spells: spellinfo;
+  character: char;
   setState: (newsp: spellinfo) => void;
   edit: boolean;
 }) {
@@ -72,6 +74,30 @@ export default function SpellsPage(props: {
     setTab(newValue);
   };
 
+  function handleSpellAbility(event: React.ChangeEvent<HTMLInputElement>) {
+    let newSpells: spellinfo = {
+      ...s,
+      spellability: parseInt(event.target.value)
+    }
+    props.setState(newSpells);
+  }
+
+  function handleDC(event: React.ChangeEvent<HTMLInputElement>) {
+    let newSpells: spellinfo = {
+      ...s,
+      savedc: parseInt(event.target.value)
+    }
+    props.setState(newSpells);
+  }
+
+  function handleAtk(event: React.ChangeEvent<HTMLInputElement>) {
+    let newSpells: spellinfo = {
+      ...s,
+      atkbonus: parseInt(event.target.value)
+    }
+    props.setState(newSpells);
+  }
+
   function a11yProps(index: any) {
     return {
       id: `vertical-tab-${index}`,
@@ -79,87 +105,140 @@ export default function SpellsPage(props: {
     };
   }
 
+  let tabs = [];
+  for (let i = 0; i < s.spellsknown.length; i++) {
+    tabs.push(<Tab label={"Level " + i} {...a11yProps(i)} />);
+  }
 
-
+  let leveltabs = [];
+  for (let i = 0; i < s.spellsknown.length; i++) {
+    leveltabs.push(<SpellLevel spells={s}
+      setState={props.setState}
+      edit={props.edit}
+      level={i}
+      tabVal={curTab}
+    />);
+  }
+  /* <MenuItem value={s.spellability}>{getSpellAbility(s.spellability)}</MenuItem> */
   if (props.edit) {
     return (
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <Tabs
-          orientation="vertical"
-          variant="scrollable"
-          value={curTab}
-          onChange={handleChange}
-        >
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
-          <Tab label="Item Four" {...a11yProps(3)} />
-          <Tab label="Item Five" {...a11yProps(4)} />
-          <Tab label="Item Six" {...a11yProps(5)} />
-          <Tab label="Item Seven" {...a11yProps(6)} />
-        </Tabs>
-        <TabPanel value={curTab} index={0}>
-          Item One
-      </TabPanel>
-        <TabPanel value={curTab} index={1}>
-          Item Two
-      </TabPanel>
-        <TabPanel value={curTab} index={2}>
-          Item Three
-      </TabPanel>
-        <TabPanel value={curTab} index={3}>
-          Item Four
-      </TabPanel>
-        <TabPanel value={curTab} index={4}>
-          Item Five
-      </TabPanel>
-        <TabPanel value={curTab} index={5}>
-          Item Six
-      </TabPanel>
-        <TabPanel value={curTab} index={6}>
-          Item Seven
-      </TabPanel>
-      </div>
+      <Grid container spacing={3} style={{ padding: "2.5vw", marginTop: "50px" }}>
+        <Grid item xs={4}>
+          <Card className="row-card">
+            <CardContent>
+              <FormControl>
+                <InputLabel id="class-form">Spell Ability</InputLabel>
+                <Select
+                  value={s.spellability}
+                  inputProps={{
+                    name: 'spellability',
+                    id: 'spell-ability',
+                  }}
+                  style={{ minWidth: "100px" }}
+                  onChange={handleSpellAbility}>
+
+                  <MenuItem value={0}>Strength</MenuItem>
+                  <MenuItem value={1}>Dexterity</MenuItem>
+                  <MenuItem value={2}>Constitution</MenuItem>
+                  <MenuItem value={3}>Intelligence</MenuItem>
+                  <MenuItem value={4}>Wisdom</MenuItem>
+                  <MenuItem value={5}>Charisma</MenuItem>
+                </Select>
+              </FormControl>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={4}>
+          <Card className="row-card">
+            <CardContent>
+              <TextField inputProps={{ style: { textAlign: 'center' } }} label="DC" defaultValue={s.savedc}
+                onChange={handleDC} type="number" />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={4}>
+          <Card className="row-card">
+            <CardContent>
+              <TextField inputProps={{ style: { textAlign: 'center' } }} label="Attack Bonus" defaultValue={s.atkbonus}
+                onChange={handleAtk} type="number" />
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography style={{ textAlign: 'center', width: '100%' }} variant="h5">Spells Known and Prepared</Typography>
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                <Tabs
+                  orientation="vertical"
+                  variant="scrollable"
+                  value={curTab}
+                  onChange={handleChange}
+                >
+                  {tabs}
+                </Tabs>
+                {leveltabs}
+              </div>
+            </CardContent>
+          </Card>
+        </Grid>
+        {s.points.max > -1 ? <SpellPoints spells={s} setState={props.setState} edit={props.edit} /> : null}
+        <Grid item xs={3}>
+          <Card className="row-card">
+            <CardContent>
+              <AddLevel spells={s} setState={props.setState} />
+            </CardContent>
+          </Card>
+        </Grid>
+
+      </Grid>
     );
   } else {
     return (
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <Tabs
-          orientation="vertical"
-          variant="scrollable"
-          value={curTab}
-          onChange={handleChange}
-        >
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
-          <Tab label="Item Four" {...a11yProps(3)} />
-          <Tab label="Item Five" {...a11yProps(4)} />
-          <Tab label="Item Six" {...a11yProps(5)} />
-          <Tab label="Item Seven" {...a11yProps(6)} />
-        </Tabs>
-        <TabPanel value={curTab} index={0}>
-          Item One
-      </TabPanel>
-        <TabPanel value={curTab} index={1}>
-          Item Two
-      </TabPanel>
-        <TabPanel value={curTab} index={2}>
-          Item Three
-      </TabPanel>
-        <TabPanel value={curTab} index={3}>
-          Item Four
-      </TabPanel>
-        <TabPanel value={curTab} index={4}>
-          Item Five
-      </TabPanel>
-        <TabPanel value={curTab} index={5}>
-          Item Six
-      </TabPanel>
-        <TabPanel value={curTab} index={6}>
-          Item Seven
-      </TabPanel>
-      </div>
+      <Grid container spacing={3} style={{ padding: "2.5vw", marginTop: "50px" }}>
+        <Grid item xs={4}>
+          <Card className="row-card">
+            <CardContent>
+              <Typography>Spell Ability: {getSpellAbility(s.spellability)}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={4}>
+          <Card className="row-card">
+            <CardContent>
+              <Typography>Spell Save DC: {s.savedc}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={4}>
+          <Card className="row-card">
+            <CardContent>
+              <Typography>Attack Bonus: +{s.atkbonus}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography style={{ textAlign: 'center', width: '100%' }} variant="h5">Spells Known and Prepared</Typography>
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                <Tabs
+                  orientation="vertical"
+                  variant="scrollable"
+                  value={curTab}
+                  onChange={handleChange}
+                >
+                  {tabs}
+                </Tabs>
+                {leveltabs}
+              </div>
+            </CardContent>
+          </Card>
+        </Grid>
+        {s.points.max > -1 ? <SpellPoints spells={s} setState={props.setState} edit={props.edit} /> : null}
+      </Grid>
     );
   }
 }

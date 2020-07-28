@@ -58,17 +58,13 @@ let basicsTest: char = {
 }
 
 let spellsTest: spellinfo = {
+  savedc: 10,
+  atkbonus: 2,
+  spellability: 3,
   casterlevel: 10,
-  spellsknown: [{
-    level: 0,
-    known: [{ name: "Mage Armor", description: "Make your unarmored AC 13 + your Dex", prepped: true },
-    { name: "Firebolt", description: "Range 120ft., 1d10 fire damage.", prepped: true }]
-  }, {
-    level: 1,
-    known: [{ name: "Mage Armor", description: "Make your unarmored AC 13 + your Dex", prepped: true },
-    { name: "Firebolt", description: "Range 120ft., 1d10 fire damage.", prepped: true }]
-  }],
-  points: false
+  spellsknown: [[], []],
+  points: { value: -1, max: -1 },
+  slots: [{ value: 2, max: 2 }, { value: 1, max: 1 }]
 }
 
 /*  
@@ -109,7 +105,7 @@ function App() {
       case 0:
         return (<CharacterPage character={basics} setState={useSetState} edit={edit} />);
       case 2:
-        return (<SpellsPage spells={spells} setState={useSetSpells} edit={edit} />);
+        return (<SpellsPage character={basics} spells={spells} setState={useSetSpells} edit={edit} />);
       default:
         return;
     }
