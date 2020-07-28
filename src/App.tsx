@@ -89,6 +89,12 @@ function App() {
   const [page, setPage] = React.useState(0);
   const [spells, setSpells] = React.useState(spellsTest);
 
+  function setWholeChar(newCharInfo: charinfo) {
+    setState(newCharInfo.basics)
+    if (newCharInfo.sp) {
+      setSpells(newCharInfo.sp)
+    }
+  }
 
   const useSetState = function (newchar: char) {
     setState(newchar);
@@ -147,7 +153,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="App" style={{ marginBottom: "50px" }} >
-        <CharacterAppBar name={basics.name} startEdit={startEdit} edit={edit} endEdit={endEdit} />
+        <CharacterAppBar name={basics.name} startEdit={startEdit} edit={edit} endEdit={endEdit} setWholeChar={setWholeChar} wholeChar={{ basics: basics, sp: spells }} />
         {getPage(page)}
         <div className="bot-nav"><LabelBottomNav goTo0={setToChar} goTo2={setToSpells} /></div>
       </div>

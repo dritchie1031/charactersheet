@@ -106,7 +106,7 @@ export function AddProfBtn(props: {
   return (
     <div>
       <Button variant="contained" color="primary" onClick={handleClickOpen}>
-        Add Feature
+        Add Proficiency
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title"
         fullWidth={true}

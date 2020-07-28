@@ -12,8 +12,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import TagMenu from './TagMenu';
 import '../style.css';
 import CreateChar from './CreateChar';
+import ImportExport from './ImportExport';
+import { charinfo } from './data';
 
-export default function CharacterAppBar(props: { name: string; startEdit: () => void; edit: boolean; endEdit: () => void }) {
+export default function CharacterAppBar(props: { name: string; startEdit: () => void; edit: boolean; endEdit: () => void; setWholeChar: (newCharInfo: charinfo) => void; wholeChar: charinfo }) {
   if (props.edit) {
     return (
       <div style={{ position: "fixed", top: "0px", width: "100%", zIndex: 4 }}>
@@ -28,12 +30,8 @@ export default function CharacterAppBar(props: { name: string; startEdit: () => 
                   <SaveAltIcon />
                 </Fab>
               </Tooltip>
-              <CreateChar />
-              <Tooltip title="Import or Export">
-                <Fab size="small" color="secondary" onClick={props.endEdit}>
-                  <ImportExportIcon />
-                </Fab>
-              </Tooltip>
+              <CreateChar setCharInfo={props.setWholeChar} />
+              <ImportExport wholeCharacter={props.wholeChar} setWholeCharacter={props.setWholeChar} />
               <Tooltip title="Level Up">
                 <Fab size="small" onClick={props.endEdit}>
                   <ArrowUpwardIcon />
@@ -59,12 +57,8 @@ export default function CharacterAppBar(props: { name: string; startEdit: () => 
                   <EditIcon />
                 </Fab>
               </Tooltip>
-              <CreateChar />
-              <Tooltip title="Import or Export">
-                <Fab size="small" color="secondary" onClick={props.endEdit}>
-                  <ImportExportIcon />
-                </Fab>
-              </Tooltip>
+              <CreateChar setCharInfo={props.setWholeChar} />
+              <ImportExport wholeCharacter={props.wholeChar} setWholeCharacter={props.setWholeChar} />
               <Tooltip title="Level Up">
                 <Fab size="small" onClick={props.endEdit}>
                   <ArrowUpwardIcon />

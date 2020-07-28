@@ -79,12 +79,13 @@ export interface spellinfo {
     level: number;
     known: spell[];
   }[];
-  points: boolean;
+  points: number;
+  slots: number[];
 }
 
 export interface charinfo {
   basics: char;
-  inv: inventory;
-  bg: background;
-  sp: spells;
+  inv?: inventory;
+  bg?: background;
+  sp?: spellinfo;
 }
