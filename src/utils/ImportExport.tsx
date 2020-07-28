@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import ImportExportIcon from '@material-ui/icons/ImportExport';
 import Fab from '@material-ui/core/Fab';
 import Dialog from '@material-ui/core/Dialog';
@@ -28,7 +28,21 @@ export default function ImportExport(props: {
   };
 
   const handleImport = () => {
-
+    let input: HTMLElement = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', '.json');
+    input.addEventListener("change", function (event: Event) {
+      let reader: FileReader = new FileReader();
+      reader.readAsText(event.target.files[0]);
+      reader.onloadend = function () {
+        if (reader.result) {
+          let newChar = JSON.parse(reader.result as string);
+          props.setWholeCharacter(newChar);
+        }
+      };
+      handleClose();
+    });
+    input.click();
   }
 
   const handleExport = () => {
