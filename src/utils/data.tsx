@@ -53,7 +53,6 @@ export interface inventory {
     silver: number;
     copper: number;
   };
-  weapons: weapon[];
   items: string[];
 }
 

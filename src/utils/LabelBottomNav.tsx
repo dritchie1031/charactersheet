@@ -8,7 +8,7 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 
 import '../style.css';
 
-export default function LabelBottomNav(props: { goTo0: () => void; goTo2: () => void }) {
+export default function LabelBottomNav(props: { goTo0: () => void; goTo2: () => void; goTo3: () => void }) {
   const [value, setValue] = React.useState('recents');
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
@@ -20,7 +20,7 @@ export default function LabelBottomNav(props: { goTo0: () => void; goTo2: () => 
       <BottomNavigationAction label="Character" value="char" onClick={props.goTo0} icon={<PersonIcon />} />
       <BottomNavigationAction label="Background" value="bg" icon={<FingerprintIcon />} />
       <BottomNavigationAction label="Spells" value="spells" onClick={props.goTo2} icon={<FireplaceIcon />} />
-      <BottomNavigationAction label="Inventory" value="inv" icon={<ListAltIcon />} />
+      <BottomNavigationAction label="Inventory" value="inv" onClick={props.goTo3} icon={<ListAltIcon />} />
     </BottomNavigation>
   );
 }

@@ -12,6 +12,8 @@ import { DeleteSpell } from './SpellBtns';
 import { spellinfo, spell } from '../utils/data';
 import '../style.css';
 
+const pointCost = [0, 2, 3, 5, 6, 7, 9, 10, 11, 13];
+
 export default function SpellsPage(props: {
   spells: spellinfo;
   setState: (newsp: spellinfo) => void;
@@ -69,6 +71,20 @@ export default function SpellsPage(props: {
     props.setState(newSpells);
   }
 
+  function castSpell() {
+    let newPt = { ...s.points };
+    newPt.value -= pointCost[props.level];
+
+    if (newPt.value < 0) {
+      newPt.value = 0;
+    }
+    let newspells: spellinfo = {
+      ...s,
+      points: newPt
+    }
+    props.setState(newspells);
+  }
+
   if (props.edit) {
     return (
       <Accordion>
@@ -97,6 +113,7 @@ export default function SpellsPage(props: {
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
           <Typography style={{ width: "80%" }}>{s.spellsknown[props.level][props.index].name}</Typography>
+          {s.spellsknown[props.level][props.index].prepped ? <Chip color="primary" label="Cast" onClick={castSpell} /> : null}
           <Chip label={s.spellsknown[props.level][props.index].prepped ? "Prepped" : "Not Prepped"} onClick={togglePrep} />
         </AccordionSummary>
         <AccordionDetails>
