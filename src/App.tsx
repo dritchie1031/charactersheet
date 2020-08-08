@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { createStyles, makeStyles, Theme, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
 import LabelBottomNav from './utils/LabelBottomNav';
+import esES from '@material-ui/core/locale';
 
-import { charinfo, char, spellinfo, spell } from './utils/data';
+import { charinfo, char, spellinfo, inventory } from './utils/data';
 import CharacterPage from './charpage/CharacterPage';
 import SpellsPage from './spellpage/SpellsPage';
+import InventoryPage from './invpage/InventoryPage';
 import CharacterAppBar from './utils/CharacterAppBar';
 import './App.css';
 import './style.css';
@@ -57,18 +59,24 @@ let basicsTest: char = {
   ]
 }
 
+let inv: inventory = {
+  money: {
+    plat: 1,
+    gold: 1,
+    silver: 1,
+    copper: 1
+  },
+  items: ["", "", ""]
+}
+
 let spellsTest: spellinfo = {
+  savedc: 10,
+  atkbonus: 2,
+  spellability: 3,
   casterlevel: 10,
-  spellsknown: [{
-    level: 0,
-    known: [{ name: "Mage Armor", description: "Make your unarmored AC 13 + your Dex", prepped: true },
-    { name: "Firebolt", description: "Range 120ft., 1d10 fire damage.", prepped: true }]
-  }, {
-    level: 1,
-    known: [{ name: "Mage Armor", description: "Make your unarmored AC 13 + your Dex", prepped: true },
-    { name: "Firebolt", description: "Range 120ft., 1d10 fire damage.", prepped: true }]
-  }],
-  points: false
+  spellsknown: [[], []],
+  points: { value: -1, max: -1 },
+  slots: [{ value: 2, max: 2 }, { value: 1, max: 1 }]
 }
 
 /*  
@@ -88,6 +96,7 @@ function App() {
   const [edit, setEdit] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [spells, setSpells] = React.useState(spellsTest);
+  const [inven, setInv] = React.useState(inv);
 
   function setWholeChar(newCharInfo: charinfo) {
     setState(newCharInfo.basics)
@@ -109,7 +118,9 @@ function App() {
       case 0:
         return (<CharacterPage character={basics} setState={useSetState} edit={edit} />);
       case 2:
-        return (<SpellsPage spells={spells} setState={useSetSpells} edit={edit} />);
+        return (<SpellsPage character={basics} spells={spells} setState={useSetSpells} edit={edit} />);
+      case 3:
+        return (<InventoryPage inv={inven} setState={setInv} edit={edit} />);
       default:
         return;
     }
@@ -117,6 +128,10 @@ function App() {
 
   function setToChar() {
     setPage(0);
+  }
+
+  function setToInv() {
+    setPage(3);
   }
 
   function setToSpells() {
@@ -147,15 +162,13 @@ function App() {
     setEdit(false);
   }
 
-
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="App" style={{ marginBottom: "50px" }} >
         <CharacterAppBar name={basics.name} startEdit={startEdit} edit={edit} endEdit={endEdit} setWholeChar={setWholeChar} wholeChar={{ basics: basics, sp: spells }} />
         {getPage(page)}
-        <div className="bot-nav"><LabelBottomNav goTo0={setToChar} goTo2={setToSpells} /></div>
+        <div className="bot-nav"><LabelBottomNav goTo0={setToChar} goTo2={setToSpells} goTo3={setToInv} /></div>
       </div>
     </ThemeProvider>
   );

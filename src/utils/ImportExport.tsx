@@ -46,7 +46,7 @@ export default function ImportExport(props: {
   }
 
   const handleExport = () => {
-    let exfile = new File([JSON.stringify(props.wholeCharacter)], props.wholeCharacter.basics.name + ".txt", { type: "text/plain;charset=utf-8" })
+    let exfile = new File([JSON.stringify(props.wholeCharacter)], props.wholeCharacter.basics.name + ".json", { type: "text/plain;charset=utf-8" })
     saveAs(exfile);
     handleClose();
   }

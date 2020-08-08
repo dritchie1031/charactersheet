@@ -29,6 +29,7 @@ function generateCharInfo(
   newweight: string,
   spellCaster: boolean,
   spellPoints: boolean,
+  spellability: number,
   useExp: boolean
 ): charinfo {
   let newChar: char = {
@@ -58,15 +59,12 @@ function generateCharInfo(
 
   if (spellCaster) {
     let newSpells: spellinfo = {
+      savedc: 10 + newChar.stats[spellability],
+      atkbonus: 2 + newChar.stats[spellability],
+      spellability: spellability,
       casterlevel: 1,
-      spellsknown: [{
-        level: 0,
-        known: []
-      }, {
-        level: 1,
-        known: []
-      }],
-      points: spellPoints ? 0 : -1,
+      spellsknown: [[], []],
+      points: spellPoints ? { value: 0, max: 0 } : { value: -1, max: -1 },
       slots: spellPoints ? [] : [-1, 0]
     };
     newCharInfo.sp = newSpells;
@@ -153,9 +151,28 @@ function getStepContent(stepIndex: number, handlers: ((event: React.ChangeEvent<
       </div >);
     case 2:
       return (<div style={{ height: "100%", width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-around" }}>
-        <div className="create-char-switch" onChange={handlers[6]}><Typography>Spells?</Typography><Switch /></div>
-        <div className="create-char-switch" onChange={handlers[7]}><Typography>Spell Points?</Typography><Switch /></div>
-        <div className="create-char-switch" onChange={handlers[10]}><Typography>Exp?</Typography><Switch /></div>
+        <div className="create-char-switch" ><Typography>Spells?</Typography><Switch onChange={handlers[6]} /></div>
+        <div className="create-char-switch" ><Typography>Spell Points?</Typography><Switch onChange={handlers[7]} /></div>
+        <FormControl>
+          <InputLabel id="class-form">Spellcasting Ability</InputLabel>
+          <Select
+            inputProps={{
+              name: 'spellability',
+              id: 'spell-ability',
+            }}
+            style={{ minWidth: "100px" }}
+            onChange={handlers[11]}
+          >
+            <MenuItem aria-label="None" value={7} />
+            <MenuItem value={0}>Strength</MenuItem>
+            <MenuItem value={1}>Dexterity</MenuItem>
+            <MenuItem value={2}>Constitution</MenuItem>
+            <MenuItem value={3}>Intelligence</MenuItem>
+            <MenuItem value={4}>Wisdom</MenuItem>
+            <MenuItem value={5}>Charisma</MenuItem>
+          </Select>
+        </FormControl>
+        <div className="create-char-switch" ><Typography>Exp?</Typography><Switch onChange={handlers[10]} /></div>
       </div >);
     default:
       return 'Unknown stepIndex';
@@ -175,6 +192,7 @@ export default function CreateChar(props: {
   const [hasSpells, setSpells] = React.useState(false);
   const [spellPoints, setSpellPoints] = React.useState(false);
   const [useExp, setExp] = React.useState(false);
+  const [spellability, setSA] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const steps = getSteps();
 
@@ -214,8 +232,12 @@ export default function CreateChar(props: {
     setExp(event.target.checked);
   }
 
+  function handleSpellAbility(event: React.ChangeEvent<HTMLInputElement>) {
+    setSA(parseInt(event.target.value));
+  }
+
   let handlers = [handleName, handleRace, handleClass, handleAge, handleHeight,
-    handleWeight, handleSpells, handleSpellPoints, handleExp];
+    handleWeight, handleSpells, handleSpellPoints, handleExp, handleSpellAbility];
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -227,7 +249,7 @@ export default function CreateChar(props: {
 
   const handleSave = () => {
     setActiveStep(0);
-    props.setCharInfo(generateCharInfo(name, race, charClass, age, height, weight, hasSpells, spellPoints, useExp));
+    props.setCharInfo(generateCharInfo(name, race, charClass, age, height, weight, hasSpells, spellPoints, spellability, useExp));
     handleClose();
   };
 

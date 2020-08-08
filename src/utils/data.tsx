@@ -53,7 +53,6 @@ export interface inventory {
     silver: number;
     copper: number;
   };
-  weapons: weapon[];
   items: string[];
 }
 
@@ -74,13 +73,13 @@ export interface spell {
 }
 
 export interface spellinfo {
+  spellability: number;
+  savedc: number;
+  atkbonus: number;
   casterlevel: number;
-  spellsknown: {
-    level: number;
-    known: spell[];
-  }[];
-  points: number;
-  slots: number[];
+  spellsknown: spell[][];
+  points: { value: number; max: number };
+  slots: { value: number; max: number }[];
 }
 
 export interface charinfo {
